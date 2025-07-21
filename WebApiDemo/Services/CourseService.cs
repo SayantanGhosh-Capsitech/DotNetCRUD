@@ -37,7 +37,8 @@ namespace WebApiDemo.Services
 
         public void Update(string id, Course course)
         {
-            _course.ReplaceOne(course => course.Id == id, course);
+            course.Id = id;  
+            _course.ReplaceOne(c => c.Id == id, course);
         }
     }
 }
