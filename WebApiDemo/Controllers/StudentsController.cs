@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using WebApiDemo.Models;
 using WebApiDemo.Services;
 
@@ -71,5 +72,13 @@ namespace WebApiDemo.Controllers
             studentService.Remove(student.Id);
             return Ok($"Student with Id = {id} deleted");
         }
+
+        [HttpGet("course-details")]
+        public ActionResult<List<Student>> GetStudentsWithCourseDetails()
+        {
+            var result = studentService.GetStudentsWithCourseDetails();
+            return Ok(result);
+        }
+
     }
 }

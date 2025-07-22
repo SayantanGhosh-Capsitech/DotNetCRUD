@@ -17,7 +17,8 @@ namespace WebApiDemo.Models
         public bool IsGraduated { get; set; }
 
         [BsonElement("courses")]
-        public string[]? Courses { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string[]? Courses { get; set; }  // No [BsonId] here!
 
         [BsonElement("gender")]
         public string Gender { get; set; } = String.Empty;
@@ -25,5 +26,21 @@ namespace WebApiDemo.Models
         [BsonElement("age")]
         public int Age { get; set; }
 
+        
+
+    }
+
+    public class CourseDetailsResponseList: Student
+    {
+        [BsonElement("coursedetails")]
+        public List<CourseDetail> CourseDetail { get; set; }
+    }
+
+    public class CourseDetail
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -13,8 +13,6 @@ namespace WebApiDemo.Models
         [BsonElement("name")]
         public string Name { get; set; } = string.Empty;
 
-        //[BsonElement("duration")]
-        //public string Duration { get; set; } = string.Empty;
     }
 }
 

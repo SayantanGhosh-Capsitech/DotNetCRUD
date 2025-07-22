@@ -1,4 +1,5 @@
-﻿using WebApiDemo.Models;
+﻿using MongoDB.Bson;
+using WebApiDemo.Models;
 
 namespace WebApiDemo.Services
 {
@@ -9,5 +10,7 @@ namespace WebApiDemo.Services
         Student Create(Student student);
         void Update(string id, Student student);
         void Remove(string id);
+        List<CourseDetailsResponseList> GetStudentsWithCourseDetails();
+
     }
 }
