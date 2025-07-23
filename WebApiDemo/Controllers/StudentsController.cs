@@ -45,7 +45,7 @@ namespace WebApiDemo.Controllers
             return CreatedAtAction(nameof(Get), new { id = student.Id }, student);
         }
 
-        // PUT api/<StudentsController>/5
+        // PUT api/<StudentsController>
         [HttpPut("{id}")]
         public ActionResult Put(string id, [FromBody] Student student)
         {
@@ -53,13 +53,13 @@ namespace WebApiDemo.Controllers
             if (existingStudent == null)
             {
                 return NotFound($"Student with Id = {id} not found");
-
             }
             studentService.Update(id, student);
             return NoContent();
         }
 
-        // DELETE api/<StudentsController>/5
+
+        // DELETE api/<StudentsController>
         [HttpDelete("{id}")]
         public ActionResult Delete(string id)
         {

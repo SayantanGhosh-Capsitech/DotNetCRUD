@@ -26,8 +26,6 @@ namespace WebApiDemo.Models
         [BsonElement("age")]
         public int Age { get; set; }
 
-        
-
     }
 
     public class CourseDetailsResponseList: Student

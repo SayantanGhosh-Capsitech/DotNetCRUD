@@ -41,12 +41,23 @@ namespace WebApiDemo.Services
         {
             _student.ReplaceOne(student => student.Id == id, student);
         }
+        //public void Update(string id, Student updatedStudent)
+        //{
+        //    var filter = Builders<Student>.Filter.Eq(s => s.Id, id);
+        //    var update = Builders<Student>.Update
+        //        .Set(s => s.Name, updatedStudent.Name)
+        //        .Set(s => s.Age, updatedStudent.Age)
+        //        .Set(s => s.Gender, updatedStudent.Gender)
+        //        .Set(s => s.IsGraduated, updatedStudent.IsGraduated)
+        //        .Set(s => s.Courses, updatedStudent.Courses); // 👈 this replaces course IDs with new array
 
+        //    _student.UpdateOne(filter, update);
+        //}
 
-public List<CourseDetailsResponseList> GetStudentsWithCourseDetails()
-    {
-        var pipeline = new BsonDocument[]
+        public List<CourseDetailsResponseList> GetStudentsWithCourseDetails()
         {
+            var pipeline = new BsonDocument[]
+            {
         new BsonDocument("$unwind", new BsonDocument
         {
             { "path", "$courses" },
@@ -70,25 +81,18 @@ public List<CourseDetailsResponseList> GetStudentsWithCourseDetails()
             { "graduated", new BsonDocument("$first", "$graduated") },
             { "gender", new BsonDocument("$first", "$gender") },
             { "age", new BsonDocument("$first", "$age") },
-            //{ "courses", new BsonDocument("$push", "$courses") },
             { "coursedetails", new BsonDocument("$push", "$courseDetail") }
-        }),
-        new BsonDocument("$merge", new BsonDocument
-        {
-            { "into", "Students" },
-            { "on", "_id" },
-            { "whenMatched", "merge" },
-            { "whenNotMatched", "insert" }
         })
-        };
-           var student= _student.Aggregate<BsonDocument>(pipeline).ToList();
+            };
 
-            var result = student.Select(b => new CourseDetailsResponseList
+            var studentDocs = _student.Aggregate<BsonDocument>(pipeline).ToList();
+
+            var result = studentDocs.Select(b => new CourseDetailsResponseList
             {
                 Name = b.GetValue("name", "").AsString,
-                IsGraduated = b.GetValue("graduated", "").AsBoolean,
+                IsGraduated = b.GetValue("graduated", false).AsBoolean,
                 Gender = b.GetValue("gender", "").AsString,
-                Age = b.GetValue("age", "").AsInt32,
+                Age = b.GetValue("age", 0).AsInt32,
                 Id = b.GetValue("_id", "").ToString(),
                 CourseDetail = b.GetValue("coursedetails", new BsonArray())
                    .AsBsonArray
